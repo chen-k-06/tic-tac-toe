@@ -11,11 +11,11 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    margin: 20px;
+    margin: 30px;
 }
 
 .grid {
-    margin: 30px auto;
+    margin: auto;
     display: grid;
     grid-template-rows: repeat(3, 1fr);
     gap: 0px;
