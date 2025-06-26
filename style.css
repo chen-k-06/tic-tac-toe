@@ -17,7 +17,7 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    margin: 20px 45px;
+    margin: 0px 45px;
 }
 
 .grid {
@@ -41,14 +41,14 @@ body {
 .box {
     aspect-ratio: 1;
     max-width: calc((100% - 30px) / 3);
-    border: 0.6rem solid black;
-    font-size: 2rem;
+    border: 1vw solid black;
+    font-size: 2vw;
     margin: 0;
     box-sizing: border-box;
 }
 
 .info {
-    width: calc(50%);
+    width: calc(100% - 30px);
     justify-content: flex-start;
     align-items: flex-start;
 }
@@ -59,11 +59,25 @@ h1 {
 }
 
 p {
-    font-size: 2.4vw;
+    font-size: 2.2vw;
+}
+
+#button-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 button {
     background-color: rgb(255, 88, 88);
+    margin: 1vw;
+    padding: 1.3vw;
+    border-radius: 12px;
+    border: 0.5vw solid black;
+    color: black;
+    font-weight: 600;
+    font-size: 2.7vw;
+    width: max-content;
 }
 
 /* Remove border around edges */
