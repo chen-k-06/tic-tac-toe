@@ -42,9 +42,10 @@ body {
     aspect-ratio: 1;
     max-width: calc((100% - 30px) / 3);
     border: 1vw solid black;
-    font-size: 2vw;
+    font-size: 8vw;
     margin: 0;
     box-sizing: border-box;
+    text-align: center;
 }
 
 .info {
