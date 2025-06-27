@@ -156,6 +156,7 @@ button {
     .box {
         flex-shrink: 0;
         border-width: 4px;
+        font-size: 60px;
     }
 
     .container {
@@ -164,10 +165,19 @@ button {
 
     .grid {
         width: 100%;
-        margin: 7px;
+        margin: 6px;
     }
 
     .info {
         display: block;
+        width: 100%;
+    }
+
+    #button-row {
+        justify-content: flex-start;
+    }
+
+    button {
+        margin: 1.3vw;
     }
 }
