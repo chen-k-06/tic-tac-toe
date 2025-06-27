@@ -42,10 +42,13 @@ body {
     aspect-ratio: 1;
     max-width: calc((100% - 30px) / 3);
     border: 1vw solid black;
-    font-size: 8vw;
+    font-size: 7vw;
     margin: 0;
     box-sizing: border-box;
     text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .info {
@@ -121,12 +124,50 @@ button {
 
 @media (max-width: 500px) {
     .box {
+        flex-shrink: 0;
         border-width: 6px;
+        font-size: 75px;
+    }
+
+    .container {
+        flex-wrap: wrap;
+    }
+
+    .grid {
+        width: 100%;
+        margin: 10px;
+    }
+
+    .info {
+        display: block;
+        width: 100%;
+    }
+
+    #button-row {
+        justify-content: flex-start;
+    }
+
+    button {
+        margin: 1.3vw;
     }
 }
 
 @media (max-width: 300px) {
     .box {
+        flex-shrink: 0;
         border-width: 4px;
+    }
+
+    .container {
+        flex-wrap: wrap;
+    }
+
+    .grid {
+        width: 100%;
+        margin: 7px;
+    }
+
+    .info {
+        display: block;
     }
 }
