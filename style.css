@@ -79,9 +79,14 @@ button {
     border-radius: 12px;
     border: 0.5vw solid black;
     color: black;
-    font-weight: 600;
-    font-size: 2.7vw;
+    font-weight: 900;
+    font-size: 2.5vw;
     width: max-content;
+    box-shadow: 1px 1px 1px black;
+}
+
+button:hover {
+    transform: translateY(-3px);
 }
 
 /* Remove border around edges */
