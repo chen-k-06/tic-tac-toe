@@ -2,7 +2,7 @@ turnCount = 0;
 
 // event listener for clicks
 let boxes = document.querySelectorAll(".box");
-check = False;
+check = false;
 boxes.forEach(box => {
     box.addEventListener("click", () => {
         if (check == 0) { // game already over 
