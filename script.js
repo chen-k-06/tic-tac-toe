@@ -44,6 +44,7 @@ boxes.forEach((box, index) => {
     });
 });
 
+// event listener for hint button
 function isGameOver() {
     /* Calculates if the tic-tac-toe game is over based on the current board 
     */
@@ -111,7 +112,7 @@ function isGameOver() {
     return 0;
 }
 
-function getAIGuess() {
+function getAIGuess(board, turn_cout) {
     // API call
     return 0;
 }
