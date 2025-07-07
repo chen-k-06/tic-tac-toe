@@ -1,11 +1,24 @@
 turnCount = 0;
+let board = {
+    row0box0: "0",
+    row0box1: "0",
+    row0box2: "0",
+    row1box0: "0",
+    row1box1: "0",
+    row1box2: "0",
+    row2box0: "0",
+    row2box1: "0",
+    row2box2: "0",
+}
 
 // event listener for clicks
 let boxes = document.querySelectorAll(".box");
 check = 0;
-boxes.forEach(box => {
+boxes.forEach((box, index) => {
     box.addEventListener("click", () => {
-        console.log("Clicked: ", box)
+        row = Math.floor(index / 3);
+        column = index % 3;
+        console.log("Clicked: ", box);
         if (check == 1 || check == 2) { // game already over 
             return;
         }
@@ -15,12 +28,16 @@ boxes.forEach(box => {
         if (turnCount % 2 == 0) {
             box.textContent = "X";
             box.classList.add("X");
+            board[`row${row}box${column}`] = "X";
+            console.log(board[`row${row}box${column}`]);
         }
         else {
             box.textContent = "O";
             box.classList.add("O");
+            board[`row${row}box${column}`] = "O";
+            console.log(board[`row${row}box${column}`]);
         }
-        box.classList.add("played")
+        box.classList.add("played");
         turnCount++;
         check = isGameOver(); // returns 0 when game not over, 1 for X win, 2 for O win
         console.log("Check: ", check)
