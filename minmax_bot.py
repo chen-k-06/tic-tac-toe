@@ -15,7 +15,7 @@ def get_AI_guess(board, move_count):
     if move_count == 1:
         get_first_guess(board)        
 
-def get_first_guess(board):
+def get_first_guess(board): #translate to JS, don't call API in this case
     row = -1
     column = -1
 

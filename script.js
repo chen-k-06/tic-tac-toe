@@ -1,4 +1,6 @@
-turnCount = 0;
+let turnCount = 0;
+let AiToggle = document.getElementById("ai-select")
+let vsAI = 1; // starts true
 let board = {
     row0box0: "0",
     row0box1: "0",
@@ -16,6 +18,9 @@ let boxes = document.querySelectorAll(".box");
 check = 0;
 boxes.forEach((box, index) => {
     box.addEventListener("click", () => {
+        if (turnCount === 0) {
+            AiToggle.disabled = true;
+        }
         row = Math.floor(index / 3);
         column = index % 3;
         console.log("Clicked: ", box);
@@ -112,7 +117,42 @@ function isGameOver() {
     return 0;
 }
 
-function getAIGuess(board, turn_cout) {
+function getAIGuess(board, turn_count) {
     // API call
+    if (turn_count <= 1) {
+        get_first_guess(board);
+    }
+    else { // call python API
+
+    }
     return 0;
 }
+
+function get_first_guess(board) {
+    if (turnCount == 0) {
+
+    }
+    else { // turnCount == 1
+
+    }
+}
+
+AiToggle.addEventListener("input", () => {
+    if (AiToggle.value === "1") {
+        console.log("Mode: vs Human");
+    } else {
+        console.log("Mode: vs AI");
+    }
+});
+
+AiToggle.addEventListener("mousedown", (e) => {
+    if (AiToggle.value === "0") {
+        AiToggle.value = 1;
+        vsAI = 1;
+    }
+    else {
+        AiToggle.value = 0;
+        vsAI = 0;
+    }
+    e.preventDefault();
+});

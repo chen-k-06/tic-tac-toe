@@ -77,6 +77,17 @@ p {
     font-size: 2.2vw;
 }
 
+#ai-select {
+    display: inline-block;
+    margin-left: 10px;
+    margin-right: 10px;
+    border-radius: 40px;
+    appearance: none;
+    width: 30px;
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
 #button-row {
     display: flex;
     align-items: center;
