@@ -1,8 +1,12 @@
 let turnCount = 0;
 let AiToggle = document.getElementById("ai-select")
 let vsAI = 1; // starts 
+let maximizer;
+let minimizer;
+let AI_PLAYER;
 const PLAYER_X = 1;
 const PLAYER_O = 2;
+const DRAW = 3;
 const WIN_SCORE = 10;
 const LOSE_SCORE = -10;
 
@@ -32,9 +36,11 @@ boxes.forEach((box, index) => {
         column = index % 3;
         console.log("Clicked: ", box);
         if (check === PLAYER_X || check === PLAYER_O) { // game already over 
+            console.log("Game over")
             return;
         }
         if (box.classList.contains("played")) {
+            console.log("Box already played")
             return;
         }
         updateBoard(box, index);
@@ -43,6 +49,10 @@ boxes.forEach((box, index) => {
         console.log("Check: ", check)
 
         if (check === 0 && vsAI === 1) {
+            maximizer = (turnCount % 2 === 0) ? PLAYER_X : PLAYER_O;
+            minimizer = (turnCount % 2 === 0) ? PLAYER_O : PLAYER_X;
+            AI_PLAYER = maximizer;
+
             let ai_guess_index = get_best_guess();
             let ai_box = document.getElementById(ai_guess_index);
             updateBoard(ai_box, ai_guess_index);
@@ -90,9 +100,6 @@ function isGameOver(board) {
     }
 
     if (x_boxes.length < 3 && o_boxes.length < 3) {
-        console.log(x_boxes);
-        console.log(o_boxes);
-        console.log("Game not over: not enough moves completed.");
         return 0;
     }
 
@@ -148,16 +155,18 @@ function isGameOver(board) {
     }
 
     if (none_boxes_count === 0) {
-        return 3;
+        return DRAW;
     }
     return 0;
 }
 
 function getAIGuess() {
-    // hueristic for 1st guess
+    // hard code first and second guesses
     if (turnCount == 0) {
         return 4;
     }
+    // if (turnCount == 1) {
+    //}
     else {
         return get_best_guess();
     }
@@ -165,15 +174,16 @@ function getAIGuess() {
 
 function get_best_guess() {
     let moves = [];
-    let max_player = 0;
     let best_move = -1;
 
     // compute players 
     if (turnCount % 2 == 0) {
-        max_player = PLAYER_O;
+        max_player = PLAYER_X;
+        min_player = PLAYER_O;
     }
     else {
-        max_player = PLAYER_X;
+        max_player = PLAYER_O;
+        min_player = PLAYER_X;
     }
 
     // populate moves
@@ -185,14 +195,38 @@ function get_best_guess() {
 
     // get minmax value for each move 
     let isMax = true; // you always want to optimize for the player calling the function
+    let currentPlayer;
     let best_mini_max = Number.NEGATIVE_INFINITY;
+    const turn = turnCount % 2;
 
+    // for each possible move, make that move on a copy of the board
     for (let i = 0; i < moves.length; i++) {
         let board_copy = [...board_arr];
+
+        if (turn === 0) {
+            board_copy[moves[i]] = "X";
+            currentPlayer = PLAYER_O;
+        }
+        else {
+            board_copy[moves[i]] = "O";
+            currentPlayer = PLAYER_X;
+        }
+
+        // remove whatever move has been made from the moves array
         let moves_copy = [...moves];
-        console.log("passed index: i", i)
-        console.log("moves_copy[i]: ", moves_copy[i]);
-        let value = minimax(board_copy, max_player, moves[i], isMax, turnCount, moves_copy, 0);
+
+        const index = moves_copy.indexOf(moves[i]);
+        if (index > -1) {
+            moves_copy.splice(index, 1);
+        }
+        else {
+            console.log("Error: moves[i] not found in moves_copy")
+        }
+
+        // find the minimax of this new game
+        let value = minimax(board_copy, isMax, 0, moves_copy, currentPlayer);
+        console.log("Next move: ", moves[i]);
+        console.log("Value: ", value);
         if (value > best_mini_max) {
             best_mini_max = value;
             best_move = moves[i];
@@ -201,43 +235,18 @@ function get_best_guess() {
     return best_move;
 }
 
-function minimax(board, max_player, play_index, isMax, turn_count, moves, moves_made) {
-    // make the current move
-    const turn = turn_count % 2;
-    if (turn === 0) {
-        board[play_index] = "X";
-    }
-    else {
-        board[play_index] = "O";
-    }
-
-    // remove index (move just made) from moves array
-    console.log("moves: ", moves);
-    console.log("play index: ", moves.indexOf(play_index));
-
-    const moves_index = moves.indexOf(play_index);
-    if (moves_index === -1) {
-        console.log("Error: play index not found in moves array");
-    }
-    else {
-        moves.splice(moves_index, 1);
-    }
-
+function minimax(board, isMax, depth, moves, currentPlayer) {
     // check if game over 
     let game_result = isGameOver(board);
     if (moves.length === 0 || game_result != 0) {
-        // needs more implementation, does value change here or later? 
-        // probably here
-        // every minimax call runs to this base case, 
-        // so yeah this is the only one that can do value assignment 
-        if (game_result === max_player) {
-            return WIN_SCORE - moves_made;
+        if (game_result === maximizer) {
+            return WIN_SCORE - depth;
         }
-        else if (game_result === 3) {
+        else if (game_result === DRAW) {
             return 0;
         }
         else {
-            return LOSE_SCORE + moves_made;
+            return LOSE_SCORE + depth;
         }
     }
 
@@ -249,28 +258,40 @@ function minimax(board, max_player, play_index, isMax, turn_count, moves, moves_
     else {
         best_mini_max = Number.POSITIVE_INFINITY;
     }
-    turn_count++;
 
-    if (isMax) {
-        for (let i = 0; i < moves.length; i++) {
-            let moves_copy = [...moves];
-            let board_copy = [...board];
-            console.log("passed index: ", i)
-            console.log("moves_copy[i]: ", moves_copy[i]);
-            let value = minimax(board_copy, max_player, moves_copy[i], false, turn_count, moves_copy, moves_made + 1);
+    for (let i = 0; i < moves.length; i++) {
+
+        // make the move
+        let moves_copy = [...moves];
+        let board_copy = [...board];
+        if (currentPlayer === PLAYER_X) {
+            board_copy[moves[i]] = "X";
+        }
+        else {
+            board_copy[moves[i]] = "O";
+        }
+
+        // update current player
+        if (currentPlayer === PLAYER_X) {
+            currentPlayer = PLAYER_O;
+        }
+        else {
+            currentPlayer = PLAYER_X;
+        }
+        // remove whatever move was made from the moves list 
+        moves_copy.splice(i, 1);
+
+        // call minimax for this new game
+        if (isMax) {
+            let value = minimax(board_copy, false, depth + 1, moves_copy, currentPlayer);
             best_mini_max = Math.max(best_mini_max, value);
         }
-    }
-    else {
-        for (let i = 0; i < moves.length; i++) {
-            let moves_copy = [...moves];
-            let board_copy = [...board];
-            console.log("passed index: i", i)
-            console.log("moves_copy[i]: ", moves_copy[i]);
-            let value = minimax(board_copy, max_player, moves_copy[i], true, turn_count, moves_copy, moves_made + 1);
+        else {
+            let value = minimax(board_copy, true, depth + 1, moves_copy, currentPlayer);
             best_mini_max = Math.min(best_mini_max, value);
         }
     }
+
     return best_mini_max;
 }
 
