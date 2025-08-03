@@ -190,6 +190,8 @@ function get_best_guess() {
     for (let i = 0; i < moves.length; i++) {
         let board_copy = [...board_arr];
         let moves_copy = [...moves];
+        console.log("passed index: i", i)
+        console.log("moves_copy[i]: ", moves_copy[i]);
         let value = minimax(board_copy, max_player, moves[i], isMax, turnCount, moves_copy, 0);
         if (value > best_mini_max) {
             best_mini_max = value;
@@ -199,20 +201,23 @@ function get_best_guess() {
     return best_move;
 }
 
-function minimax(board, index, max_player, isMax, turn_count, moves, moves_made) {
+function minimax(board, max_player, play_index, isMax, turn_count, moves, moves_made) {
     // make the current move
     const turn = turn_count % 2;
     if (turn === 0) {
-        board[index] = "X";
+        board[play_index] = "X";
     }
     else {
-        board[index] = "O";
+        board[play_index] = "O";
     }
 
     // remove index (move just made) from moves array
-    const moves_index = moves.indexOf(index);
+    console.log("moves: ", moves);
+    console.log("play index: ", moves.indexOf(play_index));
+
+    const moves_index = moves.indexOf(play_index);
     if (moves_index === -1) {
-        console.log("Error: index not found in moves array");
+        console.log("Error: play index not found in moves array");
     }
     else {
         moves.splice(moves_index, 1);
@@ -250,7 +255,9 @@ function minimax(board, index, max_player, isMax, turn_count, moves, moves_made)
         for (let i = 0; i < moves.length; i++) {
             let moves_copy = [...moves];
             let board_copy = [...board];
-            let value = minimax(board_copy, max_player, moves[i], false, turn_count, moves_copy, moves_made + 1);
+            console.log("passed index: ", i)
+            console.log("moves_copy[i]: ", moves_copy[i]);
+            let value = minimax(board_copy, max_player, moves_copy[i], false, turn_count, moves_copy, moves_made + 1);
             best_mini_max = Math.max(best_mini_max, value);
         }
     }
@@ -258,7 +265,9 @@ function minimax(board, index, max_player, isMax, turn_count, moves, moves_made)
         for (let i = 0; i < moves.length; i++) {
             let moves_copy = [...moves];
             let board_copy = [...board];
-            let value = minimax(board_copy, max_player, moves[i], true, turn_count, moves_copy, moves_made + 1);
+            console.log("passed index: i", i)
+            console.log("moves_copy[i]: ", moves_copy[i]);
+            let value = minimax(board_copy, max_player, moves_copy[i], true, turn_count, moves_copy, moves_made + 1);
             best_mini_max = Math.min(best_mini_max, value);
         }
     }
