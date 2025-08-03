@@ -44,13 +44,14 @@ boxes.forEach((box, index) => {
 
         if (check === 0 && vsAI === 1) {
             let ai_guess_index = get_best_guess();
-            let ai_box = document.getElementById(index);
+            let ai_box = document.getElementById(ai_guess_index);
             updateBoard(ai_box, ai_guess_index);
         }
     });
 });
 
 function updateBoard(box, index) {
+    console.log("TurnCount: ", turnCount);
     if (turnCount % 2 == 0) {
         box.textContent = "X";
         box.classList.add("X");
@@ -165,15 +166,14 @@ function getAIGuess() {
 function get_best_guess() {
     let moves = [];
     let max_player = 0;
-    let best_mini_max = Number.NEGATIVE_INFINITY;
     let best_move = -1;
 
     // compute players 
     if (turnCount % 2 == 0) {
-        max_player = PLAYER_X;
+        max_player = PLAYER_O;
     }
     else {
-        max_player = PLAYER_O;
+        max_player = PLAYER_X;
     }
 
     // populate moves
@@ -185,6 +185,8 @@ function get_best_guess() {
 
     // get minmax value for each move 
     let isMax = true; // you always want to optimize for the player calling the function
+    let best_mini_max = Number.NEGATIVE_INFINITY;
+
     for (let i = 0; i < moves.length; i++) {
         let board_copy = [...board_arr];
         let moves_copy = [...moves];
@@ -200,7 +202,7 @@ function get_best_guess() {
 function minimax(board, index, max_player, isMax, turn_count, moves, moves_made) {
     // make the current move
     const turn = turn_count % 2;
-    if (turn === PLAYER_X) {
+    if (turn === 0) {
         board[index] = "X";
     }
     else {
