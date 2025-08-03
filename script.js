@@ -1,17 +1,22 @@
 let turnCount = 0;
 let AiToggle = document.getElementById("ai-select")
-let vsAI = 1; // starts true
-let board = {
-    row0box0: "0",
-    row0box1: "0",
-    row0box2: "0",
-    row1box0: "0",
-    row1box1: "0",
-    row1box2: "0",
-    row2box0: "0",
-    row2box1: "0",
-    row2box2: "0",
-}
+let vsAI = 1; // starts 
+const PLAYER_X = 1;
+const PLAYER_O = 2;
+
+// let board = {
+//     row0box0: "-",
+//     row0box1: "-",
+//     row0box2: "-",
+//     row1box0: "-",
+//     row1box1: "-",
+//     row1box2: "-",
+//     row2box0: "-",
+//     row2box1: "-",
+//     row2box2: "-",
+// }
+
+let board_arr = ["-", "-", "-", "-", "-", "-", "-", "-", "-"]
 
 // event listener for clicks
 let boxes = document.querySelectorAll(".box");
@@ -24,7 +29,7 @@ boxes.forEach((box, index) => {
         row = Math.floor(index / 3);
         column = index % 3;
         console.log("Clicked: ", box);
-        if (check == 1 || check == 2) { // game already over 
+        if (check == PLAYER_X || check == PLAYER_O) { // game already over 
             return;
         }
         if (box.classList.contains("played")) {
@@ -33,14 +38,17 @@ boxes.forEach((box, index) => {
         if (turnCount % 2 == 0) {
             box.textContent = "X";
             box.classList.add("X");
-            board[`row${row}box${column}`] = "X";
-            console.log(board[`row${row}box${column}`]);
+            // board[`row${row}box${column}`] = "X";
+            board_arr[index] = "X";
+            console.log(`board_arr[${index}] = "X"`);
         }
         else {
             box.textContent = "O";
             box.classList.add("O");
-            board[`row${row}box${column}`] = "O";
-            console.log(board[`row${row}box${column}`]);
+            // board[`row${row}box${column}`] = "O";
+            // console.log(board[`row${row}box${column}`]);
+            board_arr[index] = "O";
+            console.log(`board_arr[${index}] = "O"`);
         }
         box.classList.add("played");
         turnCount++;
@@ -49,7 +57,6 @@ boxes.forEach((box, index) => {
     });
 });
 
-// event listener for hint button
 function isGameOver() {
     /* Calculates if the tic-tac-toe game is over based on the current board 
     */
@@ -71,10 +78,10 @@ function isGameOver() {
         let box2 = document.getElementById(`row-${i}-box-2`);
 
         if (x_boxes.includes(box0) && x_boxes.includes(box1) && x_boxes.includes(box2)) {
-            return 1;
+            return PLAYER_X;
         }
         if (o_boxes.includes(box0) && o_boxes.includes(box1) && o_boxes.includes(box2)) {
-            return 2;
+            return PLAYER_O;
         }
     }
 
@@ -85,10 +92,10 @@ function isGameOver() {
         let box2 = document.getElementById(`row-2-box-${i}`);
 
         if (x_boxes.includes(box0) && x_boxes.includes(box1) && x_boxes.includes(box2)) {
-            return 1;
+            return PLAYER_X;
         }
         if (o_boxes.includes(box0) && o_boxes.includes(box1) && o_boxes.includes(box2)) {
-            return 2;
+            return PLAYER_O;
         }
     }
 
@@ -98,10 +105,10 @@ function isGameOver() {
     let box2 = document.getElementById(`row-2-box-2`);
 
     if (x_boxes.includes(box0) && x_boxes.includes(box1) && x_boxes.includes(box2)) {
-        return 1;
+        return PLAYER_X;
     }
     if (o_boxes.includes(box0) && o_boxes.includes(box1) && o_boxes.includes(box2)) {
-        return 2;
+        return PLAYER_O;
     }
 
     box0 = document.getElementById(`row-0-box-2`);
@@ -109,32 +116,64 @@ function isGameOver() {
     box2 = document.getElementById(`row-2-box-0`);
 
     if (x_boxes.includes(box0) && x_boxes.includes(box1) && x_boxes.includes(box2)) {
-        return 1;
+        return PLAYER_X;
     }
     if (o_boxes.includes(box0) && o_boxes.includes(box1) && o_boxes.includes(box2)) {
-        return 2;
+        return PLAYER_O;
     }
     return 0;
 }
 
-function getAIGuess(board, turn_count) {
-    // API call
-    if (turn_count <= 1) {
-        get_first_guess(board);
-    }
-    else { // call python API
-
-    }
-    return 0;
-}
-
-function get_first_guess(board) {
+function getAIGuess() {
+    // hueristic for 1st guess
     if (turnCount == 0) {
-
+        return [1, 1];
     }
-    else { // turnCount == 1
-
+    else {
+        let guess = get_best_guess();
     }
+    return guess;
+}
+
+function get_best_guess() {
+    let moves = [];
+    let max_player = 0;
+    let min_player = 0;
+    let best_mini_max = Number.NEGATIVE_INFINITY;
+    let best_move = -1;
+
+    // compute players 
+    if (turnCount % 2 == 0) {
+        max_player = PLAYER_X;
+        min_player = PLAYER_O;
+    }
+    else {
+        max_player = PLAYER_O;
+        min_player = PLAYER_X;
+    }
+
+    // populate moves
+    for (let i = 0; i < board_arr.length; i++) {
+        if (board_arr[i] === "-") {
+            moves.append(i);
+        }
+    }
+
+    // get minmax value for each move 
+    for (let i = 0; i < moves.length; i++) {
+        let board_copy = [...board];
+        let value = minimax(board_copy, moves[i], max_player, min_player, Number.NEGATIVE_INFINITY, 0);
+        if (value > best_mini_max) {
+            best_mini_max = value;
+            best_move = moves[i];
+        }
+    }
+    return best_move;
+}
+
+function minimax(board, index, max_player, min_player, value, more_move_count) {
+
+    return value;
 }
 
 AiToggle.addEventListener("input", () => {
