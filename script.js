@@ -155,7 +155,7 @@ function isGameOver(board) {
 function getAIGuess() {
     // hueristic for 1st guess
     if (turnCount == 0) {
-        return [1, 1];
+        return 4;
     }
     else {
         return get_best_guess();
@@ -188,7 +188,7 @@ function get_best_guess() {
     for (let i = 0; i < moves.length; i++) {
         let board_copy = [...board_arr];
         let moves_copy = [...moves];
-        let value = minimax(board_copy, max_player, moves[i], isMax, turnCount, moves_copy, moves_made);
+        let value = minimax(board_copy, max_player, moves[i], isMax, turnCount, moves_copy, 0);
         if (value > best_mini_max) {
             best_mini_max = value;
             best_move = moves[i];
