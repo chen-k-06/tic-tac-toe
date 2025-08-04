@@ -54,6 +54,7 @@ boxes.forEach((box, index) => {
             AI_PLAYER = maximizer;
 
             let ai_guess_index = get_best_guess();
+            console.log("AI guesses box: ", ai_guess_index)
             let ai_box = document.getElementById(ai_guess_index);
             updateBoard(ai_box, ai_guess_index);
         }
@@ -173,73 +174,42 @@ function getAIGuess() {
 }
 
 function get_best_guess() {
-    let moves = [];
     let best_move = -1;
-
-    // compute players 
-    if (turnCount % 2 == 0) {
-        max_player = PLAYER_X;
-        min_player = PLAYER_O;
-    }
-    else {
-        max_player = PLAYER_O;
-        min_player = PLAYER_X;
-    }
-
-    // populate moves
-    for (let i = 0; i < board_arr.length; i++) {
-        if (board_arr[i] === "-") {
-            moves.push(i);
-        }
-    }
-
-    // get minmax value for each move 
-    let isMax = true; // you always want to optimize for the player calling the function
-    let currentPlayer;
-    let best_mini_max = Number.NEGATIVE_INFINITY;
-    const turn = turnCount % 2;
+    let currentPlayer = turnCount % 2 == 0 ? PLAYER_X : PLAYER_O;
+    let best_mini_max = currentPlayer === maximizer ? Number.NEGATIVE_INFINITY : Number.POSITIVE_INFINITY;
 
     // for each possible move, make that move on a copy of the board
-    for (let i = 0; i < moves.length; i++) {
-        let board_copy = [...board_arr];
+    for (let i = 0; i < 9; i++) {
+        if (board_arr[i] === "-") {
+            let board_copy = [...board_arr]; // clone every iteration
+            let currentPlayerCopy = currentPlayer;
 
-        if (turn === 0) {
-            board_copy[moves[i]] = "X";
-            currentPlayer = PLAYER_O;
-        }
-        else {
-            board_copy[moves[i]] = "O";
-            currentPlayer = PLAYER_X;
-        }
+            console.log("NEW FIRST LEVEL BOARD \n")
+            console.log("board_copy for move ", i, " ", board_copy);
 
-        // remove whatever move has been made from the moves array
-        let moves_copy = [...moves];
+            board_copy = make_move(board_copy, i, currentPlayerCopy);
+            currentPlayerCopy = switch_current_player(currentPlayerCopy);
+            let value = minimax(board_copy, 0, currentPlayerCopy);
+            console.log("Value: ", value);
 
-        const index = moves_copy.indexOf(moves[i]);
-        if (index > -1) {
-            moves_copy.splice(index, 1);
-        }
-        else {
-            console.log("Error: moves[i] not found in moves_copy")
-        }
+            if (currentPlayerCopy === maximizer) {
+                best_mini_max = Math.max(best_mini_max, value);
+            }
+            else {
+                best_mini_max = Math.min(best_mini_max, value);
+            }
 
-        // find the minimax of this new game
-        let value = minimax(board_copy, isMax, 0, moves_copy, currentPlayer);
-        console.log("Next move: ", moves[i]);
-        console.log("Value: ", value);
-        if (value > best_mini_max) {
-            best_mini_max = value;
-            best_move = moves[i];
+            board_copy = undo_move(board_copy, i);
         }
     }
     return best_move;
 }
 
-function minimax(board, isMax, depth, moves, currentPlayer) {
+function minimax(board, depth, currentPlayer) {
     // check if game over 
     let game_result = isGameOver(board);
-    if (moves.length === 0 || game_result != 0) {
-        if (game_result === maximizer) {
+    if (game_result != 0) {
+        if (game_result === AI_PLAYER) {
             return WIN_SCORE - depth;
         }
         else if (game_result === DRAW) {
@@ -251,48 +221,54 @@ function minimax(board, isMax, depth, moves, currentPlayer) {
     }
 
     // run more minimaxs for all possible moves 
-    let best_mini_max = 0
-    if (isMax) {
-        best_mini_max = Number.NEGATIVE_INFINITY;
+    let best_mini_max = currentPlayer === maximizer ? Number.NEGATIVE_INFINITY : Number.POSITIVE_INFINITY;
+
+    for (let i = 0; i < 9; i++) {
+        if (board[i] === "-") {
+            let board_copy = [...board]; // clone every iteration
+            let currentPlayerCopy = currentPlayer;
+
+            // make the move
+            board_copy = make_move(board_copy, i, currentPlayerCopy);
+
+            // update current player
+            currentPlayerCopy = switch_current_player(currentPlayerCopy);
+
+            // console.log("board_copy for move ", i, " ", board);
+
+            // call minimax for this new game
+            if (currentPlayerCopy === maximizer) {
+                let value = minimax(board_copy, depth + 1, currentPlayerCopy);
+                best_mini_max = Math.max(best_mini_max, value);
+            }
+            else {
+                let value = minimax(board_copy, depth + 1, currentPlayerCopy);
+                best_mini_max = Math.min(best_mini_max, value);
+            }
+
+            board_copy = undo_move(board_copy, i);
+        }
+    }
+    return best_mini_max;
+}
+
+function make_move(board, index, player) {
+    if (player === PLAYER_X) {
+        board[index] = "X";
     }
     else {
-        best_mini_max = Number.POSITIVE_INFINITY;
+        board[index] = "O";
     }
+    return board;
+}
 
-    for (let i = 0; i < moves.length; i++) {
+function undo_move(board, index) {
+    board[index] = "-";
+    return board;
+}
 
-        // make the move
-        let moves_copy = [...moves];
-        let board_copy = [...board];
-        if (currentPlayer === PLAYER_X) {
-            board_copy[moves[i]] = "X";
-        }
-        else {
-            board_copy[moves[i]] = "O";
-        }
-
-        // update current player
-        if (currentPlayer === PLAYER_X) {
-            currentPlayer = PLAYER_O;
-        }
-        else {
-            currentPlayer = PLAYER_X;
-        }
-        // remove whatever move was made from the moves list 
-        moves_copy.splice(i, 1);
-
-        // call minimax for this new game
-        if (isMax) {
-            let value = minimax(board_copy, false, depth + 1, moves_copy, currentPlayer);
-            best_mini_max = Math.max(best_mini_max, value);
-        }
-        else {
-            let value = minimax(board_copy, true, depth + 1, moves_copy, currentPlayer);
-            best_mini_max = Math.min(best_mini_max, value);
-        }
-    }
-
-    return best_mini_max;
+function switch_current_player(currentPlayer) {
+    return currentPlayer === PLAYER_X ? PLAYER_O : PLAYER_X;
 }
 
 AiToggle.addEventListener("input", () => {
