@@ -29,19 +29,20 @@ body {
     aspect-ratio: 1;
     padding: 0;
     max-height: 90vh;
+    margin-right: 20px;
 }
 
 .row {
     display: flex;
-    grid-template-columns: repeat(3, 1fr);
     margin: 0;
     padding: 0;
 }
 
 .box {
     aspect-ratio: 1;
-    max-width: calc((100% - 30px) / 3);
-    border: 1vw solid black;
+    width: 33.33%;
+    flex: 1;
+    border: 10px solid black;
     font-size: 7vw;
     margin: 0;
     box-sizing: border-box;
@@ -66,6 +67,7 @@ body {
     width: calc(100% - 30px);
     justify-content: flex-start;
     align-items: flex-start;
+    margin-left: 20px;
 }
 
 h1 {
@@ -124,38 +126,38 @@ button:hover {
 }
 
 /* Remove border around edges */
-#row-0-box-0 {
+[id="0"] {
     border-left: none;
     border-top: none;
 }
 
-#row-0-box-1 {
+[id="1"] {
     border-top: none;
 }
 
-#row-0-box-2 {
+[id="2"] {
     border-right: none;
     border-top: none;
 }
 
-#row-1-box-0 {
+[id="3"] {
     border-left: none;
 }
 
-#row-1-box-2 {
+[id="5"] {
     border-right: none;
 }
 
-#row-2-box-0 {
+[id="6"] {
     border-left: none;
     border-bottom: none;
 }
 
-#row-2-box-1 {
+[id="7"] {
     border-bottom: none;
 }
 
-#row-2-box-2 {
+[id="8"] {
     border-right: none;
     border-bottom: none;
 }
@@ -167,6 +169,47 @@ button:hover {
 
     label {
         font-size: 14px;
+    }
+
+    .box {
+        border: 5px solid black;
+
+    }
+
+    [id="0"] {
+        border-left: none;
+        border-top: none;
+    }
+
+    [id="1"] {
+        border-top: none;
+    }
+
+    [id="2"] {
+        border-right: none;
+        border-top: none;
+    }
+
+    [id="3"] {
+        border-left: none;
+    }
+
+    [id="5"] {
+        border-right: none;
+    }
+
+    [id="6"] {
+        border-left: none;
+        border-bottom: none;
+    }
+
+    [id="7"] {
+        border-bottom: none;
+    }
+
+    [id="8"] {
+        border-right: none;
+        border-bottom: none;
     }
 }
 
@@ -181,11 +224,7 @@ button:hover {
     }
 
     .box {
-        flex-shrink: 0;
-        width: auto;
-        aspect-ratio: 1;
-        border-width: 6px;
-        font-size: 75px;
+        border: 5px solid black;
     }
 
     .container {
@@ -195,6 +234,7 @@ button:hover {
     .grid {
         width: 100%;
         margin: 10px;
+        margin-bottom: 25px;
     }
 
     .info {
@@ -208,5 +248,41 @@ button:hover {
 
     button {
         margin: 1.3vw;
+    }
+
+    [id="0"] {
+        border-left: none;
+        border-top: none;
+    }
+
+    [id="1"] {
+        border-top: none;
+    }
+
+    [id="2"] {
+        border-right: none;
+        border-top: none;
+    }
+
+    [id="3"] {
+        border-left: none;
+    }
+
+    [id="5"] {
+        border-right: none;
+    }
+
+    [id="6"] {
+        border-left: none;
+        border-bottom: none;
+    }
+
+    [id="7"] {
+        border-bottom: none;
+    }
+
+    [id="8"] {
+        border-right: none;
+        border-bottom: none;
     }
 }
