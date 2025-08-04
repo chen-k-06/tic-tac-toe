@@ -1,5 +1,5 @@
 let turnCount = 0;
-let AiToggle = document.getElementById("ai-select")
+let AiToggle = document.getElementById("ai-select");
 let vsAI = 1; // starts 
 let maximizer;
 let minimizer;
@@ -9,20 +9,7 @@ const PLAYER_O = 2;
 const DRAW = 3;
 const WIN_SCORE = 10;
 const LOSE_SCORE = -10;
-
-// let board = {
-//     row0box0: "-",
-//     row0box1: "-",
-//     row0box2: "-",
-//     row1box0: "-",
-//     row1box1: "-",
-//     row1box2: "-",
-//     row2box0: "-",
-//     row2box1: "-",
-//     row2box2: "-",
-// }
-
-let board_arr = ["-", "-", "-", "-", "-", "-", "-", "-", "-"]
+let board_arr = ["-", "-", "-", "-", "-", "-", "-", "-", "-"];
 
 // event listener for clicks
 let boxes = document.querySelectorAll(".box");
@@ -48,7 +35,7 @@ boxes.forEach((box, index) => {
         check = isGameOver(board_arr); // returns 0 when game not over, 1 for X win, 2 for O win, 3 for draw
         console.log("Check: ", check)
 
-        if (check === 0 && vsAI === 1) {
+        if (check === 0 && vsAI) {
             maximizer = (turnCount % 2 === 0) ? PLAYER_X : PLAYER_O;
             minimizer = (turnCount % 2 === 0) ? PLAYER_O : PLAYER_X;
             AI_PLAYER = maximizer;
@@ -67,15 +54,12 @@ function updateBoard(box, index) {
     if (turnCount % 2 == 0) {
         box.textContent = "X";
         box.classList.add("X");
-        // board[`row${row}box${column}`] = "X";
         board_arr[index] = "X";
         console.log(`board_arr[${index}] = "X"`);
     }
     else {
         box.textContent = "O";
         box.classList.add("O");
-        // board[`row${row}box${column}`] = "O";
-        // console.log(board[`row${row}box${column}`]);
         board_arr[index] = "O";
         console.log(`board_arr[${index}] = "O"`);
     }
@@ -188,13 +172,9 @@ function get_best_guess() {
             let board_copy = [...board_arr];
             let currentPlayerCopy = currentPlayer;
 
-            console.log("NEW FIRST LEVEL BOARD \n");
-            console.log("board_copy for move ", i, " ", board_copy);
-
             board_copy = make_move(board_copy, i, currentPlayerCopy);
             currentPlayerCopy = switch_current_player(currentPlayerCopy);
             let value = minimax(board_copy, 0, currentPlayerCopy);
-            console.log("Value: ", value);
 
             if (currentPlayer === maximizer) {
                 if (best_mini_max < value) {
@@ -217,7 +197,6 @@ function minimax(board, depth, currentPlayer) {
     // check if game over 
     let game_result = isGameOver(board);
     if (game_result != 0) {
-        // console.log("base case reached")
         if (game_result === maximizer) {
             return WIN_SCORE - depth;
         }
@@ -243,22 +222,15 @@ function minimax(board, depth, currentPlayer) {
             // update current player
             currentPlayerCopy = switch_current_player(currentPlayerCopy);
 
-            // console.log("board_copy for move ", i, " ", board);
-
             // call minimax for this new game
             if (currentPlayer === maximizer) {
-
                 let value = minimax(board_copy, depth + 1, currentPlayerCopy);
-                // console.log("Value: ", value);
                 best_mini_max = Math.max(best_mini_max, value);
             }
             else {
                 let value = minimax(board_copy, depth + 1, currentPlayerCopy);
-                // console.log("Value: ", value);
                 best_mini_max = Math.min(best_mini_max, value);
             }
-
-            board_copy = undo_move(board_copy, i);
         }
     }
     return best_mini_max;
@@ -274,31 +246,18 @@ function make_move(board, index, player) {
     return board;
 }
 
-function undo_move(board, index) {
-    board[index] = "-";
-    return board;
-}
-
 function switch_current_player(currentPlayer) {
     return currentPlayer === PLAYER_X ? PLAYER_O : PLAYER_X;
 }
 
-AiToggle.addEventListener("input", () => {
-    if (AiToggle.value === "1") {
-        console.log("Mode: vs Human");
-    } else {
-        console.log("Mode: vs AI");
-    }
+AiToggle.addEventListener("mousedown", (e) => {
+    vsAI = vsAI ? 0 : 1; // toggle
+    AiToggle.value = vsAI;
+    console.log(`Mode: ${vsAI ? "vs AI" : "vs Human"}`);
+    e.preventDefault();
 });
 
-AiToggle.addEventListener("mousedown", (e) => {
-    if (AiToggle.value === "0") {
-        AiToggle.value = 1;
-        vsAI = 1;
-    }
-    else {
-        AiToggle.value = 0;
-        vsAI = 0;
-    }
-    e.preventDefault();
+AiToggle.addEventListener("input", () => {
+    vsAI = parseInt(AiToggle.value);
+    console.log(`Mode: ${vsAI ? "vs AI" : "vs Human"}`);
 });

@@ -74,7 +74,11 @@ h1 {
 }
 
 p {
-    font-size: 2.2vw;
+    font-size: 20px;
+}
+
+label {
+    font-size: 20px;
 }
 
 #ai-select {
@@ -86,6 +90,14 @@ p {
     width: 30px;
     margin-left: 5px;
     margin-right: 5px;
+    background-color: white;
+    border: 2px solid gray;
+}
+
+hr {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    border-top: 5px solid black;
 }
 
 #button-row {
@@ -148,8 +160,26 @@ button:hover {
     border-bottom: none;
 }
 
+@media (max-width: 850px) {
+    p {
+        font-size: 15px;
+    }
+
+    label {
+        font-size: 15px;
+    }
+}
+
 
 @media (max-width: 500px) {
+    p {
+        font-size: 10px;
+    }
+
+    label {
+        font-size: 10px;
+    }
+
     .box {
         flex-shrink: 0;
         border-width: 6px;
@@ -180,6 +210,7 @@ button:hover {
 }
 
 @media (max-width: 300px) {
+
     .box {
         flex-shrink: 0;
         border-width: 4px;
