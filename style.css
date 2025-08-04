@@ -50,6 +50,8 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
+    overflow: hidden;
+    white-space: nowrap;
     font-family: 'Courier New', Courier, monospace;
     font-weight: 900;
 }
@@ -173,7 +175,6 @@ button:hover {
 
     .box {
         border: 5px solid black;
-
     }
 
     [id="0"] {
