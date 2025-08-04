@@ -57,6 +57,7 @@ boxes.forEach((box, index) => {
             console.log("AI guesses box: ", ai_guess_index)
             let ai_box = document.getElementById(ai_guess_index);
             updateBoard(ai_box, ai_guess_index);
+            check = isGameOver(board_arr);
         }
     });
 });
@@ -196,12 +197,16 @@ function get_best_guess() {
             console.log("Value: ", value);
 
             if (currentPlayer === maximizer) {
-                best_mini_max = Math.max(best_mini_max, value);
-                best_move = i;
+                if (best_mini_max < value) {
+                    best_move = i;
+                    best_mini_max = value;
+                }
             }
             else {
-                best_mini_max = Math.min(best_mini_max, value);
-                best_move = i;
+                if (best_mini_max > value) {
+                    best_move = i;
+                    best_mini_max = value;
+                }
             }
         }
     }
