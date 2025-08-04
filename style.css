@@ -230,12 +230,17 @@ button:hover {
 
     .container {
         flex-wrap: wrap;
+        margin: 5px 10px;
     }
 
     .grid {
         width: 100%;
         margin: 10px;
         margin-bottom: 25px;
+    }
+
+    #ai-select {
+        color: rgb(255, 88, 88);
     }
 
     .info {
