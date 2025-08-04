@@ -162,26 +162,28 @@ button:hover {
 
 @media (max-width: 850px) {
     p {
-        font-size: 15px;
+        font-size: 14px;
     }
 
     label {
-        font-size: 15px;
+        font-size: 14px;
     }
 }
 
 
 @media (max-width: 500px) {
     p {
-        font-size: 10px;
+        font-size: 12px;
     }
 
     label {
-        font-size: 10px;
+        font-size: 12px;
     }
 
     .box {
         flex-shrink: 0;
+        width: auto;
+        aspect-ratio: 1;
         border-width: 6px;
         font-size: 75px;
     }
@@ -193,37 +195,6 @@ button:hover {
     .grid {
         width: 100%;
         margin: 10px;
-    }
-
-    .info {
-        display: block;
-        width: 100%;
-    }
-
-    #button-row {
-        justify-content: flex-start;
-    }
-
-    button {
-        margin: 1.3vw;
-    }
-}
-
-@media (max-width: 300px) {
-
-    .box {
-        flex-shrink: 0;
-        border-width: 4px;
-        font-size: 60px;
-    }
-
-    .container {
-        flex-wrap: wrap;
-    }
-
-    .grid {
-        width: 100%;
-        margin: 6px;
     }
 
     .info {
