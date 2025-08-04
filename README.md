@@ -1,4 +1,4 @@
-# Tic‑Tac‑Toe (AI + Minimax / Alpha‑Beta Pruning)
+# Tic‑Tac‑Toe (AI + Minimax)
 
 A web‑based Tic‑Tac‑Toe game featuring an AI opponent powered by the Minimax algorithm and optional Alpha‑Beta pruning heuristics, implemented in JavaScript (HTML, CSS, JS).
 
