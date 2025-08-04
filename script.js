@@ -167,6 +167,9 @@ function getAIGuess() {
         return 4;
     }
     // if (turnCount == 1) {
+    // if (board_arr[4] === "-") {
+    // return 4;
+    //}
     //}
     else {
         return get_best_guess();
@@ -181,10 +184,10 @@ function get_best_guess() {
     // for each possible move, make that move on a copy of the board
     for (let i = 0; i < 9; i++) {
         if (board_arr[i] === "-") {
-            let board_copy = [...board_arr]; // clone every iteration
+            let board_copy = [...board_arr];
             let currentPlayerCopy = currentPlayer;
 
-            console.log("NEW FIRST LEVEL BOARD \n")
+            console.log("NEW FIRST LEVEL BOARD \n");
             console.log("board_copy for move ", i, " ", board_copy);
 
             board_copy = make_move(board_copy, i, currentPlayerCopy);
@@ -192,14 +195,14 @@ function get_best_guess() {
             let value = minimax(board_copy, 0, currentPlayerCopy);
             console.log("Value: ", value);
 
-            if (currentPlayerCopy === maximizer) {
+            if (currentPlayer === maximizer) {
                 best_mini_max = Math.max(best_mini_max, value);
+                best_move = i;
             }
             else {
                 best_mini_max = Math.min(best_mini_max, value);
+                best_move = i;
             }
-
-            board_copy = undo_move(board_copy, i);
         }
     }
     return best_move;
@@ -209,7 +212,8 @@ function minimax(board, depth, currentPlayer) {
     // check if game over 
     let game_result = isGameOver(board);
     if (game_result != 0) {
-        if (game_result === AI_PLAYER) {
+        // console.log("base case reached")
+        if (game_result === maximizer) {
             return WIN_SCORE - depth;
         }
         else if (game_result === DRAW) {
@@ -237,12 +241,15 @@ function minimax(board, depth, currentPlayer) {
             // console.log("board_copy for move ", i, " ", board);
 
             // call minimax for this new game
-            if (currentPlayerCopy === maximizer) {
+            if (currentPlayer === maximizer) {
+
                 let value = minimax(board_copy, depth + 1, currentPlayerCopy);
+                // console.log("Value: ", value);
                 best_mini_max = Math.max(best_mini_max, value);
             }
             else {
                 let value = minimax(board_copy, depth + 1, currentPlayerCopy);
+                // console.log("Value: ", value);
                 best_mini_max = Math.min(best_mini_max, value);
             }
 
