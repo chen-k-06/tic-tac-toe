@@ -3,7 +3,7 @@ let AiToggle = document.getElementById("ai-select");
 let vsAI = 1; // starts 
 let maximizer;
 let minimizer;
-let AI_PLAYER;
+let AI_PLAYER = null;
 const PLAYER_X = 1;
 const PLAYER_O = 2;
 const DRAW = 3;
@@ -33,6 +33,10 @@ boxes.forEach((box, index) => {
         updateBoard(box, index);
 
         check = isGameOver(board_arr); // returns 0 when game not over, 1 for X win, 2 for O win, 3 for draw
+        if (check != 0) {
+            endGame(check);
+        }
+
         console.log("Check: ", check)
 
         if (check === 0 && vsAI) {
@@ -45,6 +49,9 @@ boxes.forEach((box, index) => {
             let ai_box = document.getElementById(ai_guess_index);
             updateBoard(ai_box, ai_guess_index);
             check = isGameOver(board_arr);
+            if (check != 0) {
+                endGame(check);
+            }
         }
     });
 });
@@ -261,3 +268,27 @@ AiToggle.addEventListener("input", () => {
     vsAI = parseInt(AiToggle.value);
     console.log(`Mode: ${vsAI ? "vs AI" : "vs Human"}`);
 });
+
+function endGame(gameResult) {
+    const popup = document.getElementById("endgame-popup");
+    const message = document.getElementById("endgame-message");
+
+    if (AI_PLAYER != null && gameResult === AI_PLAYER) {
+        console.log("Game over. The winner was the AI player.");
+        message.textContent = "Game over. The winner was the AI player.";
+    }
+    else if (gameResult === DRAW) {
+        console.log("Game over. The game ended in a draw.");
+        message.textContent = "Game over. The game ended in a draw.";
+    }
+    else if (gameResult === PLAYER_X) {
+        console.log("Game over. The winner was the X player.");
+        message.textContent = "Game over. The winner was the X player.";
+    }
+    else {
+        console.log("Game over. The winner was the O player.");
+        message.textContent = "Game over. The winner was the O player.";
+    }
+
+    popup.classList.remove("hidden");
+}
