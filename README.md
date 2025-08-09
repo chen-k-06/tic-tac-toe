@@ -1,6 +1,8 @@
 # Tic‑Tac‑Toe (AI + Minimax)
 
-A web‑based Tic‑Tac‑Toe game featuring an AI opponent powered by the Minimax algorithm and optional Alpha‑Beta pruning heuristics, implemented in JavaScript (HTML, CSS, JS).
+A web‑based Tic‑Tac‑Toe game featuring an AI opponent powered by the Minimax algorithm, implemented in JavaScript (HTML, CSS, JS).
+
+https://github.com/user-attachments/assets/58abcae6-3cde-4b73-bc0b-1b19692ea77b
 
 ---
 
