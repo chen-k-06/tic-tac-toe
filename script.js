@@ -2,7 +2,6 @@ let turnCount = 0;
 let AiToggle = document.getElementById("ai-select");
 let vsAI = 1; // starts 
 let maximizer;
-let minimizer;
 let AI_PLAYER = null;
 let boxes = document.querySelectorAll(".box");
 let check = 0;
@@ -52,7 +51,7 @@ boxes.forEach((box, index) => {
             minimizer = (turnCount % 2 === 0) ? PLAYER_O : PLAYER_X;
             AI_PLAYER = maximizer;
 
-            let ai_guess_index = get_best_guess();
+            let ai_guess_index = getAIGuess();
             console.log("AI guesses box: ", ai_guess_index)
             let ai_box = document.getElementById(ai_guess_index);
             updateBoard(ai_box, ai_guess_index);
@@ -61,6 +60,7 @@ boxes.forEach((box, index) => {
                 endGame(check);
             }
         }
+        return check;
     });
 });
 
