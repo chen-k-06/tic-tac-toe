@@ -16,6 +16,4 @@ Play here:
 - **AI opponent**: Uses Minimax algorithm.
 - **Heuristic move selection**: Optimizes early moves when playing first.
 - **Responsive UI**: Built with HTML, CSS, and vanilla JavaScript.
-- **Self‑testing script**: `bot_tester.js` can simulate multiple games for benchmarking.
 
----
